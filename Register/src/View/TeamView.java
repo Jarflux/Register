@@ -1,9 +1,7 @@
 package View;
 
 import Controller.TeamController;
-import Model.Drink;
 import Model.Team;
-import View.OrderView;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -12,12 +10,9 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -73,14 +68,14 @@ public class TeamView {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        for (int counter = 0; counter < (TeamController.getInstance().getAllTeams().size()); counter = counter + 1) {
+        List<Team> teams = TeamController.getInstance().getAllTeamsOrderByNumberAsc();
+        for (int counter = 0; counter < (teams.size()); counter = counter + 1) {
             JButton btnTable = new JButton();
             btnTable.setLayout(new BoxLayout(btnTable, BoxLayout.PAGE_AXIS));
-            JLabel lblNumber = new JLabel(Integer.toString(TeamController.getInstance().getAllTeams().get(
-                    counter).getNumber()));
+            JLabel lblNumber = new JLabel(Integer.toString(teams.get(counter).getNumber()));
             lblNumber.setFont(new Font("test", 0, 40));
             lblNumber.setAlignmentX(Component.CENTER_ALIGNMENT);
-            JLabel lblTeamName = new JLabel(TeamController.getInstance().getAllTeams().get(counter).getName());
+            JLabel lblTeamName = new JLabel(teams.get(counter).getName());
             lblTeamName.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnTable.add(lblNumber);
             btnTable.add(lblTeamName);
@@ -130,15 +125,16 @@ public class TeamView {
         JPanel list = new JPanel();
         double total = 0.0;
         JTextArea statisticsArea = new JTextArea("Statistics \n-----------------------------\n");
-
-        for (Team t : TeamController.getInstance().getAllTeams()) {
-            statisticsArea.append(String.format("%-15s %5.2f euro\n", t.getName(), t.getTotalPrice()));
+        statisticsArea.setPreferredSize(new Dimension(400, 800));
+        for (Team t : TeamController.getInstance().getAllTeamsOrderByTotalPriceDesc()) {
+            statisticsArea.append(String.format("%-35s %5.2f euro\n", t.getName(), t.getTotalPrice()));
             total += t.getTotalPrice();
         }
         statisticsArea.append("                  -----------\n");
-        statisticsArea.append(String.format("%-15s %5.2f euro\n", "totaal", total));
-
+        statisticsArea.append(String.format("%-45s %5.2f euro\n", "totaal", total));
+        
         list.add(statisticsArea);
+        list.setPreferredSize(new Dimension(400, 800));
         frame.add(list, BorderLayout.EAST);
     }
 
