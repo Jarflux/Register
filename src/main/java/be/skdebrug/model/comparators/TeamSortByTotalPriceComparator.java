@@ -1,10 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Model.comparators;
+package be.skdebrug.model.comparators;
 
-import Model.Team;
+import be.skdebrug.model.Team;
 import java.util.Comparator;
 
 /**

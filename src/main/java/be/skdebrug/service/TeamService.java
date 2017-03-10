@@ -1,33 +1,30 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Controller;
+package be.skdebrug.service;
 
-import Model.Team;
-import Model.comparators.*;
+import be.skdebrug.model.Team;
+import be.skdebrug.model.comparators.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * @author: Ben Oeyen
- * @date: 9-feb-2013
+ * Developer: Ben Oeyen
+ * Date: 10/03/2017
  */
-public class TeamController {
 
-    private static TeamController teamController;
+public class TeamService {
+
+    private static TeamService teamService;
     private List<Team> fTeams;
 
-    private TeamController() {
+    private TeamService() {
         fTeams = new ArrayList<>();
     }
 
-    public static TeamController getInstance() {
-        if (teamController == null) {
-            teamController = new TeamController();
+    public static TeamService getInstance() {
+        if (teamService == null) {
+            teamService = new TeamService();
         }
-        return teamController;
+        return teamService;
     }
 
     public List<Team> getAllTeams() {

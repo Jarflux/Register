@@ -1,10 +1,10 @@
-package View;
+package be.skdebrug.view;
 
-import Controller.PriceController;
-import Controller.TeamController;
-import Model.Drink;
-import Model.Order;
-import View.OrderView;
+import be.skdebrug.model.Beverage;
+import be.skdebrug.model.Order;
+import be.skdebrug.service.PriceService;
+import be.skdebrug.service.TeamService;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -26,19 +26,24 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-public class DrinkView {
+/**
+ * Developer: Ben Oeyen
+ * Date: 10/03/2017
+ */
 
-    private static DrinkView instance;
+public class BeverageView {
+
+    private static BeverageView instance;
     JFrame frame = new JFrame("Cashier");
-    PriceController priceController = PriceController.getInstance();
-    TeamController teamController = TeamController.getInstance();
+    PriceService priceService = PriceService.getInstance();
+    TeamService teamService = TeamService.getInstance();
     int fTeamId;
     int fOrderId;
     Boolean newOrder = false;
 
-    public static DrinkView getInstance() {
+    public static BeverageView getInstance() {
         if (instance == null) {
-            instance = new DrinkView();
+            instance = new BeverageView();
         }
         return instance;
     }
@@ -57,8 +62,8 @@ public class DrinkView {
         if (orderId == null) {
             newOrder = true;
             Order order = new Order();
-            teamController.getTeam(teamId).addOrder(order);
-            fOrderId = teamController.getTeam(teamId).getAllOrders().indexOf(order);
+            teamService.getTeam(teamId).addOrder(order);
+            fOrderId = teamService.getTeam(teamId).getAllOrders().indexOf(order);
         } else {
             fOrderId = orderId;
         }
@@ -88,15 +93,15 @@ public class DrinkView {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(5, 5, 10, 10));
 
-        for (int counter = 0; counter < priceController.getSize() - 1; counter++) {
+        for (int counter = 0; counter < priceService.getSize() - 1; counter++) {
             JButton btnBeverage = new JButton();
             btnBeverage.setLayout(new BoxLayout(btnBeverage, BoxLayout.PAGE_AXIS));
             String path = "/images/"
-                    + priceController.getDrinkByIndex(counter)
+                    + priceService.getDrinkByIndex(counter)
                     .getPicture() + ".jpg";
             JLabel lblImage = new JLabel(new ImageIcon(getClass().getResource(path)));
             lblImage.setAlignmentX(Component.CENTER_ALIGNMENT);
-            JLabel lblName = new JLabel(priceController.getDrinkByIndex(counter).getName());
+            JLabel lblName = new JLabel(priceService.getDrinkByIndex(counter).getName());
             lblName.setFont(new Font("test", Font.BOLD, 11));
             lblName.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnBeverage.add(lblImage);
@@ -104,7 +109,7 @@ public class DrinkView {
             btnBeverage.add(lblName);
             btnBeverage.setPreferredSize(new Dimension(100, 75));
 
-            final String Name = priceController.getDrinkByIndex(counter).getName();
+            final String Name = priceService.getDrinkByIndex(counter).getName();
             btnBeverage.addMouseListener(new MouseAdapter() {
                 boolean pressed;
 
@@ -124,9 +129,9 @@ public class DrinkView {
 
                     if (pressed) {
                         if (SwingUtilities.isRightMouseButton(e)) {
-                            teamController.getTeam(fTeamId).getOrder(fOrderId).removeDrink(priceController.getDrinkByName(Name));
+                            teamService.getTeam(fTeamId).getOrder(fOrderId).removeBeverage(priceService.getDrinkByName(Name));
                         } else {
-                            teamController.getTeam(fTeamId).getOrder(fOrderId).addDrink(priceController.getDrinkByName(Name));
+                            teamService.getTeam(fTeamId).getOrder(fOrderId).addBeverage(priceService.getDrinkByName(Name));
                         }
                         createBeveragePanel();
                     }
@@ -170,7 +175,7 @@ public class DrinkView {
         double total = 0;
         JTextArea beverageOrderList = new JTextArea("Bestelling \n-----------------------------\n");
 
-        for (Drink d : teamController.getTeam(fTeamId).getOrder(fOrderId).getAllDrinks()) {
+        for (Beverage d : teamService.getTeam(fTeamId).getOrder(fOrderId).getAllBeverages()) {
             beverageOrderList.append(String.format("%2d x  %-15s %5.2f euro\n", 1, d.getName(), d.getPrice()));
             total += d.getPrice();
         }
@@ -185,12 +190,12 @@ public class DrinkView {
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals("Confirm")) {
                 OrderView.getInstance().open();
-                DrinkView.getInstance().dispose();
+                BeverageView.getInstance().dispose();
                 TeamView.getInstance().save();
             }
             if (e.getActionCommand().equals("Back")) {
                 OrderView.getInstance().open();
-                DrinkView.getInstance().dispose();
+                BeverageView.getInstance().dispose();
             }
         }
     }

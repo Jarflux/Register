@@ -1,17 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Model;
+package be.skdebrug.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.jdom2.Element;
 
 /**
- * @author: Ben Oeyen
- * @date: 9-feb-2013
+ * Developer: Ben Oeyen
+ * Date: 10/03/2017
  */
+
 public class Team {
 
     private String fName;
@@ -63,7 +60,7 @@ public class Team {
     public int getTotalAmountDrinks() {
         int total = 0;
         for (Order o : fOrders) {
-            total += o.getTotalAmountDrinks();
+            total += o.getTotalAmountBeverages();
         }
         return total;
     }

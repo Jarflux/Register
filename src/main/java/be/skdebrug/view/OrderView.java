@@ -1,7 +1,8 @@
-package View;
+package be.skdebrug.view;
 
-import Controller.TeamController;
-import Model.Order;
+import be.skdebrug.model.Order;
+import be.skdebrug.service.TeamService;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -17,12 +18,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+/**
+ * Developer: Ben Oeyen
+ * Date: 10/03/2017
+ */
+
 public class OrderView {
 
     private static OrderView instance;
     JFrame frame = new JFrame("Cashier");
     int fTeamId;
-    TeamController teamController = TeamController.getInstance();
+    TeamService teamService = TeamService.getInstance();
 
     public static OrderView getInstance() {
         if ((instance == null) || (instance.frame == null)) {
@@ -52,7 +58,7 @@ public class OrderView {
         frame.getContentPane().removeAll();
         JPanel panel1 = new JPanel();
 
-        JLabel teamName = new JLabel(teamController.getTeam(fTeamId).getName());
+        JLabel teamName = new JLabel(teamService.getTeam(fTeamId).getName());
         panel1.add(teamName);
         frame.add(panel1, BorderLayout.NORTH);
 
@@ -82,7 +88,7 @@ public class OrderView {
 
 
         int counter = 0;
-        for (Order o : teamController.getAllTeams().get(fTeamId).getAllOrders()) {
+        for (Order o : teamService.getAllTeams().get(fTeamId).getAllOrders()) {
             counter++;
 
             JLabel lblOrder1 = new JLabel(counter + ")");
@@ -91,7 +97,7 @@ public class OrderView {
             c.gridx = 0;
             panel3.add(lblOrder1, c);
 
-            JLabel lblOrder2 = new JLabel(String.format("%15d", o.getTotalAmountDrinks()));
+            JLabel lblOrder2 = new JLabel(String.format("%15d", o.getTotalAmountBeverages()));
             c.gridx = 1;
             panel3.add(lblOrder2, c);
 
@@ -105,7 +111,7 @@ public class OrderView {
             btnOrder.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    DrinkView.getInstance().Init(fTeamId, finalCounter);
+                    BeverageView.getInstance().Init(fTeamId, finalCounter);
                     OrderView.getInstance().close();
                 }
             });
@@ -118,11 +124,11 @@ public class OrderView {
         c.gridx = 0;
         panel3.add(lblFooter1, c);
 
-        JLabel lblFooter2 = new JLabel(String.format("%15d", teamController.getTeam(fTeamId).getTotalAmountDrinks()));
+        JLabel lblFooter2 = new JLabel(String.format("%15d", teamService.getTeam(fTeamId).getTotalAmountDrinks()));
         c.gridx = 1;
         panel3.add(lblFooter2, c);
 
-        JLabel lblFooter3 = new JLabel(String.format("%15.2feuro  ", teamController.getTeam(fTeamId).getTotalPrice()));
+        JLabel lblFooter3 = new JLabel(String.format("%15.2feuro  ", teamService.getTeam(fTeamId).getTotalPrice()));
         c.gridx = 2;
         panel3.add(lblFooter3, c);
 
@@ -160,7 +166,7 @@ public class OrderView {
 
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals("Add Order")) {
-                DrinkView.getInstance().Init(fTeamId, null);
+                BeverageView.getInstance().Init(fTeamId, null);
                 OrderView.getInstance().close();
             }
             if (e.getActionCommand().equals("Back")) {

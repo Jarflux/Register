@@ -1,56 +1,53 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Model;
+package be.skdebrug.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.jdom2.Element;
 
 /**
- * @author: Ben Oeyen
- * @date: 9-feb-2013
+ * Developer: Ben Oeyen
+ * Date: 10/03/2017
  */
+
 public class Order {
 
-    private List<Drink> fDrinks;
+    private List<Beverage> fBeverages;
 
     public Order() {
-        this.fDrinks = new ArrayList<Drink>();
+        this.fBeverages = new ArrayList<Beverage>();
     }
 
-    public void addDrink(Drink drink) {
-        fDrinks.add(drink);
+    public void addBeverage(Beverage drink) {
+        fBeverages.add(drink);
     }
 
-    public void removeDrink(Drink drink) {
-        fDrinks.remove(drink);
+    public void removeBeverage(Beverage drink) {
+        fBeverages.remove(drink);
     }
 
-    public List<Drink> getAllDrinks() {
-        return this.fDrinks;
+    public List<Beverage> getAllBeverages() {
+        return this.fBeverages;
     }
 
-    public int getTotalAmountDrinks() {
-        return fDrinks.size();
+    public int getTotalAmountBeverages() {
+        return fBeverages.size();
     }
 
     public Double getTotalPrice() {
         double total = 0.0;
-        for (Drink d : fDrinks) {
+        for (Beverage d : fBeverages) {
             total += d.getPrice();
         }
         return total;
     }
 
     void clean() {
-        fDrinks.clear();
+        fBeverages.clear();
     }
 
     public String toString() {
         String string = "=======================" + "/n";
-        for (Drink drink : fDrinks) {
+        for (Beverage drink : fBeverages) {
             string += drink.toString() + "/n";
         }
         string += "---------------- + " + "/n";
@@ -60,7 +57,7 @@ public class Order {
 
     public Element save() {
         Element orderElement = new Element("Order");
-        for (Drink d : fDrinks) {
+        for (Beverage d : fBeverages) {
             orderElement.addContent(d.save());
         }
         return orderElement;
@@ -73,8 +70,8 @@ public class Order {
         List<Element> allChildren = (List<Element>) orderElement.getChildren();
 
         for (int counter = 0; counter < allChildren.size(); counter++) {
-            Drink tempDrink = Drink.load(allChildren.get(counter));
-            order.addDrink(tempDrink);
+            Beverage tempBeverage = Beverage.load(allChildren.get(counter));
+            order.addBeverage(tempBeverage);
         }
         return order;
     }
